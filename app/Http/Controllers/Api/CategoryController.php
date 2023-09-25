@@ -2,25 +2,25 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Product;
+use App\Models\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class ProductController extends Controller
+class CategoryController extends Controller
 {
     public function index() {
-        $products = Product::all();
-        if($products->count() > 0) {
+        $categories = Category::all();
+        if($categories->count() > 0) {
             return response()->json([
                     'status' => 200,
-                    'data' => $products,
+                    'data' => $categories,
                     'message' => 'Success'
                 ], 200);
         } else {
             return response()->json([
                 'status' => 404,
-                'data' => $products,
+                'data' => $categories,
                 'message' => 'No Records Found'
             ], 404);
         }
@@ -29,11 +29,6 @@ class ProductController extends Controller
         $input = $request->all();
         $validator = Validator::make($input, [
             'name' => 'required',
-            'details' => 'required',
-            'price' => 'required',
-            'photo' => 'required',
-            'category_id' => 'required',
-            'quantity' => 'required'
         ]);
 
         if($validator->fails()){
@@ -42,18 +37,13 @@ class ProductController extends Controller
                 'message' => $validator->messages()
             ], 422);    
         } else {
-            $product = Product::create([
+            $product = Category::create([
                 'name' => $request->name,
-                'details' => $request->details,
-                'price' => $request->price,
-                'photo' => $request->photo,
-                'category_id' => $request->category_id,
-                'quantity' => $request->quantity,
             ]);
             if($product) {
                 return response()->json([
                     'status' => 200,
-                    'message' => 'Product Added Successfully!',
+                    'message' => 'Category Added Successfully!',
                 ], 200);
             } else {
                 return response()->json([
@@ -64,11 +54,11 @@ class ProductController extends Controller
         }
     }
     public function show($id) {
-        $product = Product::find($id);
-        if($product) {
+        $category = Category::find($id);
+        if($category) {
             return response()->json([
                 'status' => 200,
-                'data' => $product,
+                'data' => $category,
                 'message' => 'Success'
             ], 200);
         } else {
@@ -83,17 +73,17 @@ class ProductController extends Controller
 
     }
     public function destroy($id) {
-        $product = Product::find($id);
-        if($product) {
-            $product->delete();
+        $category = Category::find($id);
+        if($category) {
+            $category->delete();
             return response()->json([
                 'status' => 200,
-                'message' => 'Product Deleted Succesfully'
+                'message' => 'Category Deleted Succesfully'
             ], 200);
         } else {
             return response()->json([
                 'status' => 404,
-                'message' => 'No Such Product Found'
+                'message' => 'No Such Category Found'
             ], 404);
         }
     }
